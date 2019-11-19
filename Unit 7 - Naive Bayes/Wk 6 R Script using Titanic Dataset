@@ -16,12 +16,12 @@ require(stringr)
 # prepare data
 #First load the training data in csv format, and then convert "Survived" to nominal variable and "Pclass" to ordinal variable.
 library(RWeka)
-trainset <- read.csv("F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Wk 7 - Naive Bayes/Data/titanic-train.csv")
+trainset <- read.csv("F:/Naive Bayes/Data/titanic-train.csv")
 trainset$Survived=factor(trainset$Survived)
 trainset$Pclass=ordered(trainset$Pclass)
 
 #Then load the test data and convert attributes in similar way.
-testset <- read.csv("F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Wk 7 - Naive Bayes/Data/titanic-test.csv")
+testset <- read.csv("F:/Naive Bayes/Data/titanic-test.csv")
 testset$Survived=factor(testset$Survived)
 testset$Pclass=ordered(testset$Pclass)
 
@@ -49,17 +49,6 @@ newpred=cbind(id_col, pred)
 colnames(newpred)=c("Passengerid", "Survived")
 
 #Write output to file
-write.csv(newpred, file="F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Wk 7 - Naive Bayes/titanic-NB-pred.csv", row.names=FALSE)
+write.csv(newpred, file="F:/Naive Bayes/titanic-NB-pred.csv", row.names=FALSE)
 
 #For more information about naive Bayes in e1071, see the manual at https://cran.r-project.org/web/packages/e1071/e1071.pdf
-
-#Lesson 7.11 R Questions 
-#What preprocessing steps did you do on the data?
-- For preprocessing, I discretized "survived" and "PClass" and converted it from ordinal to nominal. I then removed the variables that I wouldn't be using such as "embarked" and saved this new dataset as "newtest" and "newtrain". Lastly, I handled the missing "na"'s from the dataset. 
-
-#What algorithm parameters did you change? If using default parameters, say "default."
-- In order to "smooth" the categorical data, I had to place the parameter of "smoothing". This is also in order to solve the handle the issue of zero probability.
-
-#What evaluation method did you use? For example, if using CV, specify the number of fold.
-
-#Evaluate CV accuracy on the training data
