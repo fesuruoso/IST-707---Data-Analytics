@@ -14,16 +14,12 @@ library(rpart)
 library(e1071)
 library(stringr)
 
-#from mac
-digittrain <- read.csv("/Volumes/STORE N GO/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/digittrain.csv")
-digittest <- read.csv("/Volumes/STORE N GO/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/digittest.csv")
-
-#from windows
-digittrain <- read.csv("F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/digittrain.csv")
-digittest <- read.csv("F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/digittest.csv")
-
+#import datasets
+digittrain <- read.csv("/Volumes/STORE N GO/00 - Graduate School/HW6/digittrain.csv")
+digittest <- read.csv("/Volumes/STORE N GO/00 - Graduate School/HW6/digittest.csv")
 
 dim(digittrain)
+
 # We observe that the training dataset has 42,000 observations and 785 variables. 
 str(digittrain[, 1:10])
 summary(digittrain[, 1:10])
@@ -35,7 +31,7 @@ summary(digittest[, 1:10])
 
 # The dataset is 0 through 9 handwritten images & 784 pixel variables. Our labels are "Pixels" and our "data type are all integers 
 
-digittrain$label <- as.factor(digittrain$label)  #we don't really need this OMIT???
+digittrain$label <- as.factor(digittrain$label)
 
 '''
 We will be working with a sample of the data (due to the size) prior to building our model. 
@@ -56,12 +52,6 @@ subtest <- digittest[splitest, ]
 #specify that the row names are "NULL", that there are none
 row.names(digittrain) <- NULL
 row.names(digittest) <- NULL
-
-'''Aside from that, we are going to try to use the pixel information - which pixel lights 
-up - to determine which number is formed, and use that to try and determine the correct 
-labels for the test dataset.''' 
-
-
 
 '''Section No. 2: Decision Tree
 Build a decision tree model. Tune the parameters, such as the pruning options, and report 
@@ -99,7 +89,7 @@ finaltest$Label <- substr(finaltest$ImageId, 2, 2)
 finaltest$ImageId <- 1:nrow(finaltest)
 
 #Now we can export the model (file) and view Kaggle results
-write.csv(finaltest, file="/Volumes/STORE N GO/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/FEsuruoso - Digit Decision Tree Test.csv")
+write.csv(finaltest, file="/Volumes/STORE N GO/00 - Graduate School/HW6/FEsuruoso - Digit Decision Tree Test.csv")
 
 ''' After submitting my predictions to Kaggle for the competition, I scored 0.75. Its not terrible but
 could have been better. In my next submission, I would want to use a larger percentage of my data
@@ -125,17 +115,16 @@ nbtestacc <- nbtestacc %>% select(ImageId, Label)
 
 #We will now submit our Naive Bayes algorithm to kaggle. First we need to export to csv.
 #mac
-write.csv(nbtestacc, file="/Volumes/STORE N GO/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/FEsuruoso - Naive Bayes Classifier.csv", row.names = FALSE)
-#windows
-write.csv(nbtestacc, file="F:/00 - Graduate School/00 - SYR In Session/00 - Fall 2019/IST 707 - Data Analytics Wed9PM/Deliverables/HWs/HW6/FEsuruoso - Naive Bayes Classifier.csv", row.names = FALSE)
-
+write.csv(nbtestacc, file="/Volumes/STORE N GO/00 - Graduate School/HW6/FEsuruoso - Naive Bayes Classifier.csv", row.names = FALSE)
 '''While there was no tuning done on the Naive Bayes classifier, I scored a 57% (approximate) on my Kaggle submission. This is not as good as our decision tree algorithm''' 
 
-
 ## Section 4: Algorithm performance comparison
-We can see by the Confusion matrices shown above that the decision tree does a better job at classifying the results as it is missing less on many numbers. The naive Bayes classifier, however, has a lot of trouble distinguishing between the number 2 and the other numbers, meaning that the algorithm needs more work. 
-But what has to be taken into account was that, due to available memory, only ten percent of the actual training set was used. This set was selected at random so, had we used another random set, or the entire training set, results might have been different. This is something worth investigating and pursuing, as it could lead to better results, given that the algorithms will have more data points from which to learn from. 
+I was not pleased with the results obtained by the Naïve Bayes algorithm. I received a 57% in my confidence matrix and a57% on my Kaggle submission.  I did not perform any pruning measures like I did with the previous model, so this might have a lot to do with it. There also weren’t any additional parameters set.  
+One of the most significant measures of how good our models did was the Confusion Matrix accuracy. While we had around 80% for the first model, our second model only gave us around 57%. We see that the first model also properly identified our models better. It is also worthy to note that had we used a bigger portion of our data (we only used 10%) and tuned better, we might have had a better model. 
 
 ## Section 5: Kaggle test result
-The Kaggle test results were not great but they were quite encouraging. Having the decision tree score 0.7607 was a great first step that can be improved upon. 
-The naive Bayes algorithm, on the other hand, started off at 0.4984 - not a great result as it is almost a coin-toss between the actual result and the predicted result. The model needs further work, both in the data being used to build the classifier, and the tuning methods that can help with the model underfitting. 
+As shown above, I scored approximately 75% on my decision tree submission and 57% on my Naïve Bayes submission. Both scores could be improved greatly by the following:
+
+•	Increasing the sample size in our models from 10% to a larger sample size (maybe 20% or 40%)
+•	Additional tuning that addresses model fitting
+•	Address specific model issues (i.e smaller dataset for Naïve Bayes and larger dataset for decision tree)
